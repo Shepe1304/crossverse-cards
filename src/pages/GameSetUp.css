@@ -1,0 +1,41 @@
+.game-container {
+  padding: 16px;
+}
+
+.game-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-container {
+  margin-bottom: 8px;
+}
+
+.input-label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.input-field {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.player-list {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.list-heading {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.players-data {
+  white-space: pre-wrap;
+}

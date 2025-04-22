@@ -1,0 +1,13 @@
+.character-button {
+  padding: 8px 16px;
+  margin: 6px;
+  border-radius: 6px;
+  background-color: #e0e0e0; /* default gray */
+  border: none;
+  cursor: pointer;
+}
+
+.character-button.selected {
+  background-color: #4caf50; /* green for selected */
+  color: white;
+}

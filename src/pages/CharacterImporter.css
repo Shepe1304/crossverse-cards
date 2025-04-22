@@ -1,0 +1,67 @@
+/* src/components/CharacterImporter.css */
+
+.importer-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.importer-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.importer-description {
+  margin-bottom: 16px;
+}
+
+.importer-code-block {
+  background-color: #f5f5f5;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.importer-button {
+  padding: 8px 16px;
+  background-color: #3366ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.importer-button:hover {
+  background-color: #2952cc;
+}
+
+.importer-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.importer-status {
+  margin-top: 16px;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.importer-status.success {
+  background-color: #e6f7e6;
+  color: #2e7d32;
+}
+
+.importer-status.error {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-title {
+  font-weight: bold;
+}
