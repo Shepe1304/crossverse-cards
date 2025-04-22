@@ -57,7 +57,7 @@ const GameSetUp = (props) => {
         .select();
 
       // window.location = `/crossverse-cards/game/${data[0].id}`;
-      navigate(`game/${data[0].id}`);
+      navigate(`/game/${data[0].id}`);
     } catch (err) {
       console.error(err);
     }

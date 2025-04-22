@@ -174,7 +174,7 @@ const GameBoard = (props) => {
     }
     setStep(step + 1);
     // window.location = `/crossverse-cards/game/${id}`;
-    navigate(`game/${id}`);
+    navigate(`/game/${id}`);
   };
 
   return (
