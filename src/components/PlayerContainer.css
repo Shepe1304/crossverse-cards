@@ -1,0 +1,165 @@
+/* Add these styles to your GameBoard.css file */
+
+.player-container {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.player-container.expanded {
+  background-color: #f5f5f5;
+}
+
+.player-container.collapsed {
+  background-color: #eaeaea;
+}
+
+.player-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  position: relative;
+  width: 100%;
+  min-width: 500px;
+  /* gap: 10px; */
+}
+
+.player-summary {
+  flex: 1;
+}
+
+.player-summary h3 {
+  margin: 0;
+  margin-bottom: 5px;
+}
+
+.player-stats {
+  color: #666;
+  font-size: 0.9em;
+}
+
+.toggle-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 0.9em;
+  position: absolute;
+  right: 0;
+  top: 5px;
+}
+
+.toggle-button:hover {
+  background-color: #0069d9;
+}
+
+.player-content {
+  margin-top: 15px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.character-grid,
+.item-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.character-button,
+.item-button {
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  background-color: white;
+  transition: all 0.2s ease;
+}
+
+.character-button.selected {
+  background-color: #00796b; /* Darker teal */
+  border-color: #01362c; /* Lighter blue */
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(79, 195, 247, 0.5); /* Subtle glow */
+}
+
+.character-button:hover {
+  background-color: #26a69a; /* Vibrant teal */
+  transform: translateY(-1px); /* Subtle lift effect */
+  transition: all 0.2s ease;
+}
+
+.item-button:hover {
+  background-color: #ce93d8; /* Vibrant teal */
+  transform: translateY(-1px); /* Subtle lift effect */
+  transition: all 0.2s ease;
+}
+
+/* Add similar styling for item buttons when selected */
+.item-button.selected {
+  background-color: #7b1fa2; /* Medium purple */
+  border-color: #ce93d8; /* Light purple */
+  font-weight: bold;
+  box-shadow: 0 0 5px rgba(206, 147, 216, 0.5); /* Subtle glow */
+}
+.card-preview {
+  position: absolute;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: white;
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+.action-button {
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.save-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #3e8e41;
+}
+
+.next-button {
+  background-color: #ff9800;
+  color: white;
+}
+
+.next-button:hover {
+  background-color: #e68a00;
+}
+
+.end-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.end-button:hover {
+  background-color: #d32f2f;
+}
