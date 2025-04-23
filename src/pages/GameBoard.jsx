@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { useNavigate, useParams } from "react-router";
 import "./GameBoard.css";
+import Card from "../components/Card";
 
 const GameBoard = (props) => {
   const { id } = useParams();
@@ -15,6 +16,12 @@ const GameBoard = (props) => {
   // const [matches, setMatches] = useState([]);
   const [currentMatch, setCurrentMatch] = useState({});
   const [playersCharacters, setPlayersCharacters] = useState({});
+  const [hoveredCharacterId, setHoveredCharacterId] = useState(null);
+  const [hoveredItemId, setHoveredItemId] = useState(null);
+
+  // Store timeout references to clear them when needed
+  const timeoutRef = useRef(null);
+  const itemTimeoutRef = useRef(null);
 
   // Courtesy of: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   const shuffle = (originalArray) => {
@@ -84,14 +91,13 @@ const GameBoard = (props) => {
     };
 
     fetchCurrentMatch();
+
+    // Clean up any timeouts when component unmounts
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      if (itemTimeoutRef.current) clearTimeout(itemTimeoutRef.current);
+    };
   }, []);
-
-  // useEffect(() => {
-  //   console.log("SHUFFLED");
-
-  //   setShuffledCharacters(shuffle(characters));
-  //   setShuffledItems(shuffle(items));
-  // }, [characters, items]);
 
   const navigate = useNavigate();
 
@@ -101,7 +107,6 @@ const GameBoard = (props) => {
         .from("matches")
         .update({ status: "ended" })
         .eq("id", id);
-      // window.location = "/crossverse-cards/";
       navigate("/");
     } catch (err) {
       console.error(err);
@@ -146,6 +151,7 @@ const GameBoard = (props) => {
         .from("matches")
         .update({ players: updatedPlayers })
         .eq("id", id);
+      alert("Selection saved!");
     } catch (err) {
       console.error(err);
     }
@@ -173,53 +179,135 @@ const GameBoard = (props) => {
     } else {
     }
     setStep(step + 1);
-    // window.location = `/crossverse-cards/game/${id}`;
+    alert("If data is not showing, reload the page.");
     navigate(`/game/${id}`);
   };
 
+  // Show card immediately when hovering over button or card
+  const handleMouseEnter = (characterId) => {
+    // Clear any existing timeout to hide the card
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setHoveredCharacterId(characterId);
+  };
+
+  // Schedule hiding the card after a small delay
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setHoveredCharacterId(null);
+    }, 100); // 100ms delay gives time to move between elements
+  };
+
+  // Show item card immediately when hovering over button or card
+  const handleItemMouseEnter = (itemId) => {
+    // Clear any existing timeout to hide the item card
+    if (itemTimeoutRef.current) {
+      clearTimeout(itemTimeoutRef.current);
+      itemTimeoutRef.current = null;
+    }
+    setHoveredItemId(itemId);
+  };
+
+  // Schedule hiding the item card after a small delay
+  const handleItemMouseLeave = () => {
+    itemTimeoutRef.current = setTimeout(() => {
+      setHoveredItemId(null);
+    }, 100); // 100ms delay gives time to move between elements
+  };
+
   return (
-    <div>
+    <div className="gameboard">
       {step === 0 ? (
         <div>
           <h2>{currentMatch.name}</h2>
           <div>
             {currentMatch?.players?.map((player, key) => {
               return (
-                <div>
+                <div key={`player-${key}`}>
                   <h3>Player: {player.name}</h3>
                   <div>
                     <h3>Characters</h3>
-                    {shuffledCharacters
-                      ?.slice(key * 5, (key + 1) * 5)
-                      .map((character) => {
-                        const isSelected = playersCharacters[player.name]?.some(
-                          (char) => char.id === character.id
-                        );
+                    <div className="character-grid">
+                      {shuffledCharacters
+                        ?.slice(key * 5, (key + 1) * 5)
+                        .map((character) => {
+                          const isSelected = playersCharacters[
+                            player.name
+                          ]?.some((char) => char.id === character.id);
 
-                        return (
-                          <button
-                            key={character.id}
-                            onClick={() => chooseCharacters(player, character)}
-                            className={`character-button ${
-                              isSelected ? "selected" : ""
-                            }`}
-                          >
-                            {character.name}
-                          </button>
-                        );
-                      })}
+                          return (
+                            <div
+                              key={character.id}
+                              className="character-container"
+                            >
+                              <button
+                                onClick={() =>
+                                  chooseCharacters(player, character)
+                                }
+                                className={`character-button ${
+                                  isSelected ? "selected" : ""
+                                }`}
+                                onMouseEnter={() =>
+                                  handleMouseEnter(character.id)
+                                }
+                                onMouseLeave={handleMouseLeave}
+                              >
+                                {character.name}
+                              </button>
+                              {hoveredCharacterId === character.id && (
+                                <div
+                                  className="card-preview"
+                                  onMouseEnter={() =>
+                                    handleMouseEnter(character.id)
+                                  }
+                                  onMouseLeave={handleMouseLeave}
+                                >
+                                  <Card data={character} />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                   <div>
                     <h3>Items</h3>
-                    {shuffledItems
-                      ?.slice(key * 5, (key + 1) * 5)
-                      .map((item) => {
-                        return <button>{item.name}</button>;
-                      })}
+                    <div className="item-grid">
+                      {shuffledItems
+                        ?.slice(key * 5, (key + 1) * 5)
+                        .map((item) => {
+                          return (
+                            <div key={item.id} className="item-container">
+                              <button
+                                className="item-button"
+                                onMouseEnter={() =>
+                                  handleItemMouseEnter(item.id)
+                                }
+                                onMouseLeave={handleItemMouseLeave}
+                              >
+                                {item.name}
+                              </button>
+                              {hoveredItemId === item.id && (
+                                <div
+                                  className="card-preview"
+                                  onMouseEnter={() =>
+                                    handleItemMouseEnter(item.id)
+                                  }
+                                  onMouseLeave={handleItemMouseLeave}
+                                >
+                                  <Card data={item} />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                    </div>
                   </div>
                   <br />
                   <button
-                    style={{ background: "darkcyan", color: "white" }}
+                    className="action-button save-button"
                     onClick={saveSelection}
                   >
                     Save Selection
@@ -231,7 +319,72 @@ const GameBoard = (props) => {
           </div>
         </div>
       ) : step === 1 ? (
-        <div>Step 1</div>
+        <div>
+          {currentMatch?.players?.map((player, key) => {
+            return (
+              <div key={`player-${key}`}>
+                <h3>Player: {player.name}</h3>
+                <div>
+                  <h3>Selected Characters</h3>
+                  <div className="character-grid">
+                    {player.characters.map((character) => {
+                      return (
+                        <div key={character.id} className="character-container">
+                          <button
+                            className={`character-button`}
+                            onMouseEnter={() => handleMouseEnter(character.id)}
+                            onMouseLeave={handleMouseLeave}
+                          >
+                            {character.name}
+                          </button>
+                          {hoveredCharacterId === character.id && (
+                            <div
+                              className="card-preview"
+                              onMouseEnter={() =>
+                                handleMouseEnter(character.id)
+                              }
+                              onMouseLeave={handleMouseLeave}
+                            >
+                              <Card data={character} />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <div>
+                  <h3>Items</h3>
+                  <div className="item-grid">
+                    {player.items.map((item) => {
+                      return (
+                        <div key={item.id} className="item-container">
+                          <button
+                            className="item-button"
+                            onMouseEnter={() => handleItemMouseEnter(item.id)}
+                            onMouseLeave={handleItemMouseLeave}
+                          >
+                            {item.name}
+                          </button>
+                          {hoveredItemId === item.id && (
+                            <div
+                              className="card-preview"
+                              onMouseEnter={() => handleItemMouseEnter(item.id)}
+                              onMouseLeave={handleItemMouseLeave}
+                            >
+                              <Card data={item} />
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+                <br />
+              </div>
+            );
+          })}
+        </div>
       ) : step === 2 ? (
         <div>Step 2</div>
       ) : (
@@ -239,18 +392,12 @@ const GameBoard = (props) => {
       )}
       <br />
       <br />
-      <button
-        style={{ background: "darkgreen", color: "white" }}
-        onClick={handleNextStep}
-      >
+      <button className="action-button next-button" onClick={handleNextStep}>
         NEXT
       </button>
       <br />
       <br />
-      <button
-        style={{ background: "red", color: "white" }}
-        onClick={handleEndMatch}
-      >
+      <button className="action-button end-button" onClick={handleEndMatch}>
         END MATCH
       </button>
     </div>

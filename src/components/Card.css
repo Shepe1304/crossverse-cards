@@ -1,0 +1,141 @@
+/* Card.css */
+.card {
+  position: relative;
+  width: 260px;
+  padding: 16px;
+  border-radius: 12px;
+  color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+}
+
+.card-title {
+  margin: 0 0 6px 0;
+  font-size: 22px;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.card-subtitle {
+  margin: 0 0 12px 0;
+  padding: 4px 8px;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  font-style: italic;
+}
+
+.card-faction {
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  padding: 3px 6px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  display: inline-block;
+}
+
+.card-requirements {
+  margin: 0 0 16px 0;
+  font-size: 12px;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+.card-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.stat {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  padding: 6px 4px;
+  text-align: center;
+  font-size: 14px;
+  position: relative;
+}
+
+.stat::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.card-special {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 12px;
+  margin: 0;
+}
+
+.card-special-title {
+  font-size: 14px;
+  margin: 0 0 6px 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-weight: bold;
+}
+
+/* Character card specific styling */
+.character-card {
+  background: linear-gradient(145deg, #00838f, #006064);
+}
+
+.character-card::before {
+  background: linear-gradient(90deg, #4dd0e1, #b2ebf2, #4dd0e1);
+}
+
+.character-card .card-requirements {
+  border-left: 3px solid #b2ebf2;
+}
+
+.character-card .stat::before {
+  background-color: #006064;
+}
+
+.character-card .card-special {
+  border-left: 3px solid #4dd0e1;
+}
+
+/* Item card specific styling */
+.item-card {
+  background: linear-gradient(145deg, #7b1fa2, #6a1b9a);
+}
+
+.item-card::before {
+  background: linear-gradient(90deg, #ce93d8, #e1bee7, #ce93d8);
+}
+
+.item-card .card-requirements {
+  border-left: 3px solid #e1bee7;
+}
+
+.item-card .stat::before {
+  background-color: #6a1b9a;
+}
+
+.item-card .card-special {
+  border-left: 3px solid #ce93d8;
+}
